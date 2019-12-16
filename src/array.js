@@ -21,7 +21,12 @@ function compact(arr) {
   return result;
 }
 
+function concat(array, ...values) {
+  return [].concat(array, ...values);
+}
+
 module.exports = {
   chunk,
   compact,
+  concat,
 };
