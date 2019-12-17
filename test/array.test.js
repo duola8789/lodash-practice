@@ -2,7 +2,7 @@
  * Created by zh on 2019/12/11.
  */
 const _  = require('lodash');
-const { chunk, compact, concat } = require('../src/array');
+const { chunk, compact, concat, difference } = require('../src/array');
 
 test('test function of chunk ', () => {
   const target = ['a', 'b', 'c', 'd'];
@@ -22,4 +22,11 @@ test('test function of concat ', () => {
 
   expect(other1).toEqual(other2);
   expect(array).toEqual([1]);
+});
+
+test('test function of difference ', () => {
+ expect(difference([2, 1], [2, 3])).toEqual([1]);
+ expect(difference([2, 1, 2, 3], [3, 4], [3, 2])).toEqual([1]);
+ expect(difference([-0, 0], [-0, 0])).toEqual([]);
+ expect(difference([1, NaN, 3], [NaN, 5, NaN])).toEqual([1, 3]);
 });

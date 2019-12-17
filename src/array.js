@@ -25,8 +25,31 @@ function concat(array, ...values) {
   return [].concat(array, ...values);
 }
 
+const flat = array => array.reduce((total, current) => total.concat(...current), []);
+
+function difference(array, ...values) {
+  let result = [];
+  let targets = [...new Set(flat(values))];
+
+  for (let i = 0; i < array.length; i++) {
+    let exist = false;
+    for (let j = 0; j < targets.length; j++) {
+      // eslint-disable-next-line no-self-compare
+      if ((array[i] !== array[i] && targets[j] !== targets[j]) || array[i] === targets[j]) {
+        exist = true;
+        break;
+      }
+    }
+    if (!exist) {
+      result.push(array[i]);
+    }
+  }
+  return result;
+}
+
 module.exports = {
   chunk,
   compact,
   concat,
+  difference,
 };
