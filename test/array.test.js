@@ -1,21 +1,21 @@
 /**
  * Created by zh on 2019/12/11.
  */
-const _  = require('lodash');
-const { chunk, compact, concat, difference } = require('../src/array');
+const _ = require('lodash');
+const { chunk, compact, concat, difference, differenceBy } = require('../src/array');
 
-test('test function of chunk ', () => {
+test('chunk ', () => {
   const target = ['a', 'b', 'c', 'd'];
   expect(chunk(target, 2)).toEqual(_.chunk(target, 2));
   expect(chunk(target, 3)).toEqual(_.chunk(target, 3));
 });
 
-test('test function of compact ', () => {
+test('compact ', () => {
   expect(compact(['a', 'b', 'c', 'd'])).toEqual(_.compact(['a', 'b', 'c', 'd']));
   expect(compact([0, 1, false, 2, '', 3],)).toEqual(_.compact([0, 1, false, 2, '', 3]));
 });
 
-test('test function of concat ', () => {
+test('concat ', () => {
   const array = [1];
   const other1 = concat(array, 2, [3], [[4]]);
   const other2 = _.concat(array, 2, [3], [[4]]);
@@ -24,9 +24,14 @@ test('test function of concat ', () => {
   expect(array).toEqual([1]);
 });
 
-test('test function of difference ', () => {
+test('difference ', () => {
  expect(difference([2, 1], [2, 3])).toEqual([1]);
  expect(difference([2, 1, 2, 3], [3, 4], [3, 2])).toEqual([1]);
  expect(difference([-0, 0], [-0, 0])).toEqual([]);
  expect(difference([1, NaN, 3], [NaN, 5, NaN])).toEqual([1, 3]);
+});
+
+test.only('differenceBy ', () => {
+  expect(differenceBy([2.1, 1.2], [2.3, 3.4], Math.floor)).toEqual([1.2]);
+  expect(differenceBy([{ 'x': 2 }, { 'x': 1 }], [{ 'x': 1 }], 'x')).toEqual([{x: 2}]);
 });
