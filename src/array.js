@@ -2,13 +2,24 @@
  * Created by zh on 2019/12/11.
  */
 const _flat = array => array.reduce((total, current) => total.concat(...current), []);
-
 const _unique = array => [...new Set(_flat(array))];
 
 const _isFunction = val => Object.prototype.toString.call(val) === '[object Function]';
 const _isString = val => Object.prototype.toString.call(val) === '[object String]';
 
-const _baseDifference = (array, values, iteratee) => {
+const _getLastArg = args => ([args[args.length - 1], args.slice(0, -1)]);
+
+const _arrayIncludesWith = (array, value, comparator) => {
+  for (let i = 0; i < array.length; i++) {
+    if (comparator(array[i], value)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+// eslint-disable-next-line max-params
+const _baseDifference = (array, values, iteratee, comparator) => {
   let result = [];
   for (let i = 0; i < array.length; i++) {
     let exist = false;
@@ -22,7 +33,14 @@ const _baseDifference = (array, values, iteratee) => {
       }
     }
     if (!exist) {
-      result.push(array[i]);
+      if (_isFunction(comparator)) {
+        if(!_arrayIncludesWith(values, array[i], comparator)) {
+          result.push(array[i]);
+        }
+      } else {
+        result.push(array[i]);
+      }
+
     }
   }
   return result;
@@ -59,13 +77,13 @@ function difference(array, ...values) {
 function differenceBy(array, ...rest) {
   let values;
   let iteratee = null;
-  
+
   if (rest.length > 1) {
-    const lastArg = rest[rest.length - 1];
-    values = rest.slice(0, -1);
-    if(_isString(lastArg)) {
+    const lastArg = _getLastArg(rest)[0];
+    values = _getLastArg(rest)[1];
+    if (_isString(lastArg)) {
       iteratee = item => item[lastArg];
-    } else if(_isFunction(lastArg)) {
+    } else if (_isFunction(lastArg)) {
       iteratee = lastArg;
     } else {
       iteratee = null;
@@ -76,10 +94,27 @@ function differenceBy(array, ...rest) {
   return _baseDifference(array, _unique(values), iteratee);
 }
 
+function differenceWith(array, ...rest) {
+  let values;
+  let comparator = null;
+
+  if (rest.length > 1) {
+    const lastArg = _getLastArg(rest)[0];
+    values = _getLastArg(rest)[1];
+    if (_isFunction(lastArg)) {
+      comparator = lastArg;
+    }
+  } else {
+    values = rest;
+  }
+  return _baseDifference(array, _unique(values), null, comparator);
+}
+
 module.exports = {
   chunk,
   compact,
   concat,
   difference,
   differenceBy,
+  differenceWith,
 };

@@ -2,7 +2,7 @@
  * Created by zh on 2019/12/11.
  */
 const _ = require('lodash');
-const { chunk, compact, concat, difference, differenceBy } = require('../src/array');
+const { chunk, compact, concat, difference, differenceBy, differenceWith } = require('../src/array');
 
 test('chunk ', () => {
   const target = ['a', 'b', 'c', 'd'];
@@ -31,7 +31,14 @@ test('difference ', () => {
  expect(difference([1, NaN, 3], [NaN, 5, NaN])).toEqual([1, 3]);
 });
 
-test.only('differenceBy ', () => {
+test('differenceBy ', () => {
   expect(differenceBy([2.1, 1.2], [2.3, 3.4], Math.floor)).toEqual([1.2]);
   expect(differenceBy([{ 'x': 2 }, { 'x': 1 }], [{ 'x': 1 }], 'x')).toEqual([{x: 2}]);
+});
+
+test('differenceWith ', () => {
+  const base = [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }];
+  const compared = [{ 'x': 1, 'y': 2 }];
+  const comparator = _.isEqual;
+  expect(differenceWith(base, compared, comparator)).toEqual([base[1]]);
 });
