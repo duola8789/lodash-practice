@@ -2,7 +2,7 @@
  * Created by zh on 2019/12/11.
  */
 const _ = require('lodash');
-const { chunk, compact, concat, difference, differenceBy, differenceWith } = require('../src/array');
+const { chunk, compact, concat, difference, differenceBy, differenceWith, drop, dropRight } = require('../src/array');
 
 test('chunk ', () => {
   const target = ['a', 'b', 'c', 'd'];
@@ -41,4 +41,24 @@ test('differenceWith ', () => {
   const compared = [{ 'x': 1, 'y': 2 }];
   const comparator = _.isEqual;
   expect(differenceWith(base, compared, comparator)).toEqual([base[1]]);
+});
+
+test('drop ', () => {
+  const array = [1, 2, 3];
+  expect(drop(array)).toEqual([2, 3]);
+  expect(drop(array, 2)).toEqual([3]);
+  expect(drop(array, false)).toEqual([1, 2, 3]);
+  expect(drop(array, 0)).toEqual([1, 2, 3]);
+  expect(drop(array, -5)).toEqual([1, 2, 3]);
+  expect(drop(array, 44)).toEqual([]);
+});
+
+test.only('dropRight ', () => {
+  const array = [1, 2, 3];
+  expect(dropRight(array)).toEqual([1, 2]);
+  expect(dropRight(array, 2)).toEqual([1]);
+  expect(dropRight(array, false)).toEqual([1, 2, 3]);
+  expect(dropRight(array, 0)).toEqual([1, 2, 3]);
+  expect(dropRight(array, -5)).toEqual([1, 2, 3]);
+  expect(dropRight(array, 5)).toEqual([]);
 });

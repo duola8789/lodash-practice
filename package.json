@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "unit": "jest --no-cache --colors --coverage --verbose",
-    "test": "jest --no-cache --colors --expand --verbose --onlyChanged"
+    "unit": "jest --colors --coverage --verbose",
+    "test": "jest --colors --expand --verbose --onlyChanged"
   },
   "repository": {
     "type": "git",

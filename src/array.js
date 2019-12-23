@@ -34,7 +34,7 @@ const _baseDifference = (array, values, iteratee, comparator) => {
     }
     if (!exist) {
       if (_isFunction(comparator)) {
-        if(!_arrayIncludesWith(values, array[i], comparator)) {
+        if (!_arrayIncludesWith(values, array[i], comparator)) {
           result.push(array[i]);
         }
       } else {
@@ -110,6 +110,16 @@ function differenceWith(array, ...rest) {
   return _baseDifference(array, _unique(values), null, comparator);
 }
 
+
+function drop(array, n = 1) {
+  return array.slice(Number(n) ? n : 0);
+}
+
+function dropRight(array, n = 1) {
+  // return drop([...array].reverse(), n).reverse();
+  return array.slice(0, Number(-n) ? -n : array.length);
+}
+
 module.exports = {
   chunk,
   compact,
@@ -117,4 +127,6 @@ module.exports = {
   difference,
   differenceBy,
   differenceWith,
+  drop,
+  dropRight,
 };
