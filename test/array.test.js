@@ -2,7 +2,7 @@
  * Created by zh on 2019/12/11.
  */
 const _ = require('lodash');
-const { chunk, compact, concat, difference, differenceBy, differenceWith, drop, dropRight } = require('../src/array');
+const { chunk, compact, concat, difference, differenceBy, differenceWith, drop, dropRight, dropWhile } = require('../src/array');
 
 test('chunk ', () => {
   const target = ['a', 'b', 'c', 'd'];
@@ -53,7 +53,7 @@ test('drop ', () => {
   expect(drop(array, 44)).toEqual([]);
 });
 
-test.only('dropRight ', () => {
+test('dropRight ', () => {
   const array = [1, 2, 3];
   expect(dropRight(array)).toEqual([1, 2]);
   expect(dropRight(array, 2)).toEqual([1]);
@@ -61,4 +61,24 @@ test.only('dropRight ', () => {
   expect(dropRight(array, 0)).toEqual([1, 2, 3]);
   expect(dropRight(array, -5)).toEqual([1, 2, 3]);
   expect(dropRight(array, 5)).toEqual([]);
+});
+
+test.only('dropWhile ', () => {
+  const users = [
+    { 'user': 'barney',  'active': false },
+    { 'user': 'fred',    'active': false },
+    { 'user': 'pebbles', 'active': true }
+  ];
+  expect(dropWhile(users, function(o) { return !o.active; }))
+    .toEqual([{ 'user': 'pebbles', 'active': true }]);
+  expect(dropWhile(users, { 'user': 'barney', 'active': false }))
+    .toEqual([  { 'user': 'fred',    'active': false }, { 'user': 'pebbles', 'active': true }]);
+  expect(dropWhile(users, ['active', false]))
+    .toEqual([{ 'user': 'pebbles', 'active': true }]);
+  expect(dropWhile(users, 'active'))
+    .toEqual([
+      { 'user': 'barney',  'active': false },
+      { 'user': 'fred',    'active': false },
+      { 'user': 'pebbles', 'active': true }]
+    );
 });
