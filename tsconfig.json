@@ -1,0 +1,18 @@
+// https://juejin.im/post/5d10cc1f6fb9a07eaf2b9db6
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "moduleResolution": "node" // 决定如何处理模块。设置为 node
+  },
+
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib"
+  ]
+}
