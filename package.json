@@ -6,6 +6,7 @@
   "scripts": {
     "unit": "jest --colors --coverage --verbose",
     "test": "jest --colors --expand --verbose --onlyChanged",
+    "testing": "jest --watch --colors --expand --verbose --onlyChanged",
     "lint": "eslint src --ext .ts",
     "dev": "tsc --watch"
   },

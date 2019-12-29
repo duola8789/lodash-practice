@@ -10,6 +10,19 @@ const castArray = <T>(...rest: T[]): T[] => {
   return [];
 };
 
+const clone = <T>(value: T): T => {
+  let result: any = {};
+  if (typeof value === 'object') {
+    for (const i in value) {
+      result[i] = value[i];
+    }
+    console.log(Array.isArray(result));
+    return result;
+  }
+  return value;
+};
+
 module.exports = {
-  castArray
+  castArray,
+  clone
 };

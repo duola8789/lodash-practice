@@ -1,7 +1,7 @@
 /**
  * Created by zh on 2019/12/25.
  */
-const { castArray } = require('../dist/lang');
+const { castArray, clone } = require('../dist/lang');
 
 describe('Test Lang Methods', () => {
   it('castArray', () => {
@@ -14,5 +14,13 @@ describe('Test Lang Methods', () => {
     expect(castArray()).toEqual([]);
     const arr = [1, 2, 3];
     expect(castArray(arr) === arr).toBeTruthy();
+  });
+
+  describe.only('clone', () => {
+    it('clone should perform a shallow clone', () => {
+      const array = [{ a: 0 }, { b: 1 }];
+      const actual = clone(array);
+      expect(actual).toEqual(array);
+    });
   });
 });
