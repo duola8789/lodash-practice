@@ -1,20 +1,28 @@
-/**
- * Created by zh on 2019/12/11.
- */
 const _ = require('lodash');
 
-const _flat = array => array.reduce((total, current) => total.concat(...current), []);
-const _unique = array => [...new Set(_flat(array))];
+interface comparator {
+  (comparer: any, compared: any): boolean;
+}
 
-const _isFunction = val => Object.prototype.toString.call(val) === '[object Function]';
-const _isString = val => Object.prototype.toString.call(val) === '[object String]';
-const _isObject = val => Object.prototype.toString.call(val) === '[object Object]';
-const _isArray = val => Object.prototype.toString.call(val) === '[object Array]';
+interface iteratee {
+  (value: any): boolean | undefined;
+}
 
-const _getLastArg = args => ([args[args.length - 1], args.slice(0, -1)]);
+const _flat = (array: any[]): any[] => array.reduce((total, current) => total.concat(...current), []);
 
+const _unique = (array: any[]): any[] => [...new Set(_flat(array))];
 
-const _arrayIncludesWith = (array, value, comparator) => {
+const _isFunction = (val: any): boolean => Object.prototype.toString.call(val) === '[object Function]';
+
+const _isString = (val: any): boolean => Object.prototype.toString.call(val) === '[object String]';
+
+const _isObject = (val: any): boolean => Object.prototype.toString.call(val) === '[object Object]';
+
+const _isArray = (val: any): boolean => Object.prototype.toString.call(val) === '[object Array]';
+
+const _getLastArg = (args: any[]) => [args[args.length - 1], args.slice(0, -1)];
+
+const _arrayIncludesWith = (array: any[], value: any, comparator: comparator): boolean => {
   for (let i = 0; i < array.length; i++) {
     if (comparator(array[i], value)) {
       return true;
@@ -24,7 +32,7 @@ const _arrayIncludesWith = (array, value, comparator) => {
 };
 
 // eslint-disable-next-line max-params
-const _baseDifference = (array, values, iteratee, comparator) => {
+const _baseDifference = (array: any[], values: any[], iteratee?: iteratee, comparator?: comparator) => {
   let result = [];
   for (let i = 0; i < array.length; i++) {
     let exist = false;
@@ -45,18 +53,15 @@ const _baseDifference = (array, values, iteratee, comparator) => {
       } else {
         result.push(array[i]);
       }
-
     }
   }
   return result;
 };
 
 // TODO
-function isEqual(a, b) {
-  return _.isEqual(a, b);
-}
+const isEqual = (a: any, b: any): boolean => _.isEqual(a, b);
 
-function chunk(array, size = 1) {
+function chunk<T>(array: T[], size: number = 1): T[] {
   let result = [];
   let i = 0;
   while (i < array.length) {
@@ -66,7 +71,7 @@ function chunk(array, size = 1) {
   return result;
 }
 
-function compact(arr) {
+function compact<T>(arr: T[]): T[] {
   let result = [];
   for (let i = 0; i < arr.length; i++) {
     if (arr[i]) {
@@ -76,15 +81,15 @@ function compact(arr) {
   return result;
 }
 
-function concat(array, ...values) {
+function concat(array: any[], ...values: any[]): any[] {
   return [].concat(array, ...values);
 }
 
-function difference(array, ...values) {
+function difference(array: any, ...values: any[]): any[] {
   return _baseDifference(array, _unique(values));
 }
 
-function differenceBy(array, ...rest) {
+function differenceBy(array: any, ...rest: any[]): any[] {
   let values;
   let iteratee = null;
 
@@ -92,7 +97,7 @@ function differenceBy(array, ...rest) {
     const lastArg = _getLastArg(rest)[0];
     values = _getLastArg(rest)[1];
     if (_isString(lastArg)) {
-      iteratee = item => item[lastArg];
+      iteratee = (item) => item[lastArg];
     } else if (_isFunction(lastArg)) {
       iteratee = lastArg;
     } else {
@@ -104,7 +109,7 @@ function differenceBy(array, ...rest) {
   return _baseDifference(array, _unique(values), iteratee);
 }
 
-function differenceWith(array, ...rest) {
+function differenceWith(array: any[], ...rest: any[]): any[] {
   let values;
   let comparator = null;
 
@@ -120,38 +125,42 @@ function differenceWith(array, ...rest) {
   return _baseDifference(array, _unique(values), null, comparator);
 }
 
-
-function drop(array, n = 1) {
+function drop<T>(array: T[], n: number = 1): T[] {
   return array.slice(Number(n) ? n : 0);
 }
 
-function dropRight(array, n = 1) {
+function dropRight<T>(array: T[], n: number = 1): T[] {
   // return drop([...array].reverse(), n).reverse();
   return array.slice(0, Number(-n) ? -n : array.length);
 }
 
-function dropWhile(array, identity) {
+interface identity {
+  (value: any, index: number, array: any[]): boolean;
+  [propName: string]: any;
+}
+
+function dropWhile<T>(array: T[], identity: identity | any[] | string): T[] {
   let n = -1;
   let i = 0;
   while (i < array.length) {
     if (_isFunction(identity)) {
-      if (!identity(array[i], i, array)) {
+      if (!(<identity>identity)(array[i], i, array)) {
         n = i;
         break;
       }
     } else if (_isObject(identity)) {
-      if (!isEqual(identity, array[i])) {
+      if (!isEqual(<identity>identity, array[i])) {
         n = i;
         break;
       }
     } else if (_isArray(identity)) {
-      const [key, value] = identity;
+      const [key, value] = <any[]>identity;
       if (array[i][key] !== value) {
         n = i;
         break;
       }
     } else if (_isString(identity)) {
-      if (!array[i][identity]) {
+      if (!array[i][<string>identity]) {
         n = i;
         break;
       }
@@ -170,5 +179,5 @@ module.exports = {
   differenceWith,
   drop,
   dropRight,
-  dropWhile,
+  dropWhile
 };
