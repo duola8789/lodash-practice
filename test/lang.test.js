@@ -21,6 +21,14 @@ describe('Test Lang Methods', () => {
       const array = [{ a: 0 }, { b: 1 }];
       const actual = clone(array);
       expect(actual).toEqual(array);
+      expect(actual !== array && actual[0] === array[0]).toBeTruthy();
+    });
+
+    it('clone should perform a shallow clone', () => {
+      const array = [{ a: 0 }, { b: 1 }];
+      const actual = clone(array);
+      expect(actual).toEqual(array);
+      expect(actual !== array && actual[0] === array[0]).toBeTruthy();
     });
   });
 });

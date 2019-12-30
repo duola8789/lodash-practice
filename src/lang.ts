@@ -12,14 +12,18 @@ const castArray = <T>(...rest: T[]): T[] => {
 
 const clone = <T>(value: T): T => {
   let result: any = {};
-  if (typeof value === 'object') {
+
+  if (Array.isArray(value)) {
+    result = <any[]>value.slice(0);
+  } else if (typeof value === 'object') {
     for (const i in value) {
       result[i] = value[i];
     }
     console.log(Array.isArray(result));
     return result;
   }
-  return value;
+
+  return result;
 };
 
 module.exports = {
