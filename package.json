@@ -22,7 +22,7 @@
   "homepage": "https://github.com/duola8789/lodash-practice#readme",
   "dependencies": {
     "@types/jest": "^24.0.25",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.19"
   },
   "devDependencies": {
     "@types/node": "^13.1.0",
